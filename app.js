@@ -9,8 +9,9 @@ app.get('/', function (req, res) {
   res.sendfile(__dirname + '/index.html');
 });
 
-var com = spawn('dstat', ['-c', '--nocolor']);
+var com = spawn('dstat', ['-c', '--nocolor', '--noheaders']);
 com.stdout.on('data', function(data){
   var txt = new Buffer(data).toString('utf8', 0, data.length);
-    io.sockets.send(100 - parseInt(txt.split('  ')[2]));
+  console.log(100 - parseInt(txt.split('  ')[3]));
+  io.sockets.send(100 - parseInt(txt.split('  ')[3]));
 });
