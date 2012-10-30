@@ -1,8 +1,7 @@
 var app = require('express')()
   , server = require('http').createServer(app)
   , io = require('socket.io').listen(server)
-  , spawn = require('child_process').spawn
-  , $p = require('procstreams');
+  , spawn = require('child_process').spawn;
 
 server.listen(3000);
 
@@ -18,3 +17,13 @@ setInterval(function() {
     });
 }, 1000);
 
+
+// Helper
+function parseIntForSum(str) {
+    var possibleInteger = parseInt(str);
+    return isNaN(possibleInteger) ? 0 : possibleInteger;
+}
+
+function sum(f, s) {
+    return parseIntForSum(f) + parseIntForSum(s);
+}
