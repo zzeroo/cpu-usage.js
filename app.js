@@ -10,26 +10,29 @@ app.get('/', function (req, res) {
   res.sendfile(__dirname + '/index.html');
 });
 
+
 setInterval(function() {
   grepProc();
 }, 1000);
 
 function grepProc() {
   cpustring = exec('grep \'^cpu\ \' /proc/stat',
-      function(error, stdout, stderr) {
-        var txt = new Buffer(stdout).toString('utf8', 0, stdout.length);
-        calculateUsage(txt);
-      });
-  return cpustring;
+    function(error, stdout, stderr) {
+      var txt = new Buffer(stdout).toString('utf8', 0, stdout.length);
+      calculateUsage(txt);
+    });
 }
 
+// Helper
 function calculateUsage(data) {
   var prev_total=0
     , prev_idle=0;
 
   data = data.split(' ');
+  // remove the first element
   data.shift();
-  console.log(data);
+  // sum the array
+  idle = data.reduce(sum);
 }
 
 function parseIntForSum(str) {
