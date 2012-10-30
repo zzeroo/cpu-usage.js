@@ -1,6 +1,7 @@
 var app = require('express')()
   , server = require('http').createServer(app)
   , io = require('socket.io').listen(server)
+  , exec = require('child_process').exec
   , spawn = require('child_process').spawn;
 
 server.listen(3000);
@@ -10,15 +11,27 @@ app.get('/', function (req, res) {
 });
 
 setInterval(function() {
-  spawn('grep', ['^cpu\ ', '/proc/stat'])
-    .stdout.on('data', function(data){
-      var txt = new Buffer(data).toString('utf8', 0, data.length);
-      console.log('stdout: ' + data);
-    });
+  grepProc();
 }, 1000);
 
+function grepProc() {
+  cpustring = exec('grep \'^cpu\ \' /proc/stat',
+      function(error, stdout, stderr) {
+        var txt = new Buffer(stdout).toString('utf8', 0, stdout.length);
+        calculateUsage(txt);
+      });
+  return cpustring;
+}
 
-// Helper
+function calculateUsage(data) {
+  var prev_total=0
+    , prev_idle=0;
+
+  data = data.split(' ');
+  data.shift();
+  console.log(data);
+}
+
 function parseIntForSum(str) {
     var possibleInteger = parseInt(str);
     return isNaN(possibleInteger) ? 0 : possibleInteger;
