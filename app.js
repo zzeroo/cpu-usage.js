@@ -11,28 +11,44 @@ app.get('/', function (req, res) {
 });
 
 
+var prev_total=0
+  , prev_idle=0;
+
 setInterval(function() {
-  grepProc();
+  grepCPU();
 }, 1000);
 
-function grepProc() {
-  cpustring = exec('grep \'^cpu\ \' /proc/stat',
-    function(error, stdout, stderr) {
-      var txt = new Buffer(stdout).toString('utf8', 0, stdout.length);
-      calculateUsage(txt);
-    });
+// Helper
+function grepCPU() {
+  exec('grep \'^cpu\ \' /proc/stat',
+      function(error, stdout, stderr) {
+        var txt = new Buffer(stdout).toString('utf8', 0, stdout.length);
+        calculateUsage(txt);
+      });
 }
 
-// Helper
-function calculateUsage(data) {
-  var prev_total=0
-    , prev_idle=0;
 
+function calculateUsage(data) {
   data = data.split(' ');
   // remove the first element
   data.shift();
+ 
+  var total = 0;
   // sum the array
-  idle = data.reduce(sum);
+  idle = data[4];
+
+  total = data.reduce(sum);
+
+  diff_idle=idle-prev_idle;
+  diff_total=total-prev_total;
+  diff_usage=(1000*(diff_total-diff_idle)/diff_total+5)/10;
+
+  var usage = roundNumber(diff_usage,0);
+  console.log(usage);
+  io.sockets.send(usage);
+
+  prev_total=total;
+  prev_idle=idle;
 }
 
 function parseIntForSum(str) {
@@ -42,4 +58,9 @@ function parseIntForSum(str) {
 
 function sum(f, s) {
     return parseIntForSum(f) + parseIntForSum(s);
+}
+
+function roundNumber(number, decimals) { // Arguments: number to round, number of decimal places
+  var newnumber = new Number(number+'').toFixed(parseInt(decimals));
+  return parseFloat(newnumber);
 }
