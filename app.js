@@ -1,7 +1,7 @@
 var express = require('express')
   , app = express()
   , server = require('http').createServer(app)
-  , io = require('socket.io').listen(server)
+  , io = require('socket.io').listen(server, { log: false })
   , exec = require('child_process').exec
   , spawn = require('child_process').spawn;
 
@@ -58,7 +58,6 @@ function calculateUsage(data) {
   diff_usage=(1000*(diff_total-diff_idle)/diff_total+5)/10;
 
   var usage = roundNumber(diff_usage,0);
-  console.log(usage);
   io.sockets.emit('message', usage);
 
   prev_total=total;
