@@ -18,12 +18,24 @@ setInterval(function() {
   grepCPU();
 }, 1000);
 
+setInterval(function() {
+  grepDF();
+}, 1000);
+
 // Helper
 function grepCPU() {
   exec('grep \'^cpu\ \' /proc/stat',
       function(error, stdout, stderr) {
         var txt = new Buffer(stdout).toString('utf8', 0, stdout.length);
-        calculateUsage(txt);
+        io.sockets.emit('message', calculateUsage(txt));
+      });
+}
+
+function grepDF() {
+  exec('df |sort',
+      function(error, stdout, stderr) {
+        var txt = new Buffer(stdout).toString('utf8', 0, stdout.length);
+        io.sockets.emit('df', txt);
       });
 }
 
@@ -44,8 +56,9 @@ function calculateUsage(data) {
   diff_usage=(1000*(diff_total-diff_idle)/diff_total+5)/10;
 
   var usage = roundNumber(diff_usage,0);
-  console.log(usage);
-  io.sockets.send(usage);
+  // console.log(usage);
+  // io.sockets.send(usage);
+  return usage;
 
   prev_total=total;
   prev_idle=idle;
