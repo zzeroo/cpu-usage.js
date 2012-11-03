@@ -11,6 +11,8 @@ app.get('/', function (req, res) {
   res.sendfile(__dirname + '/index.html');
 });
 
+// static files
+app.use("/js", express.static(__dirname + '/js'));
 app.use("/css", express.static(__dirname + '/css'));
 
 var prev_total=0
@@ -34,7 +36,7 @@ function grepCPU() {
 }
 
 function grepDF() {
-  exec('df |sort',
+  exec('df',
       function(error, stdout, stderr) {
         var txt = new Buffer(stdout).toString('utf8', 0, stdout.length);
         calculateDF(txt);
