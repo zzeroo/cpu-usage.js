@@ -14,10 +14,12 @@ function showGreenBar(id, data, drive, free, use) {
   
 //  console.log(use);
   canvctx.fillStyle = "#000";
-  canvctx.fillText(drive, 5, 15);
+  canvctx.font = '12px sans-serif';
+  canvctx.textBaseline = 'bottom';
+  canvctx.fillText(drive, 5, 20);
   
   canvctx.fillStyle = "#555";
-  canvctx.fillText('free: ' + free + ' KB' + '    (' + parseInt(free/1024) + ' MiB)', 350, 15);
+  canvctx.fillText('free: ' + free + ' KB' + '    (' + parseInt(free/1024) + ' MiB)', 350, 20);
 
   return canv;
 }
