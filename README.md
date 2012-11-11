@@ -9,10 +9,10 @@ A video demonstration is available: http://www.youtube.com/watch?v=bPYgx9V6qAk
 - start the node server   
 
 ```shell
-git clone git@github.com:zzeroo/cpu-usage.js.git`
-cd cpu-usage`
-npm install express socket.io`
-node app.js`
+git clone git@github.com:zzeroo/cpu-usage.js.git
+cd cpu-usage
+npm install express socket.io
+node app.js
 ```
 
 - finaly open `http://localhost:3000` with Your favorite browser
