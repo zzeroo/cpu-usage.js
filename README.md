@@ -9,8 +9,8 @@ A video demonstration is available: http://www.youtube.com/watch?v=bPYgx9V6qAk
 - start the node server   
 
 ```shell
-git clone git@github.com:zzeroo/cpu-usage.js.git
-cd cpu-usage
+git clone git://github.com/zzeroo/cpu-usage.js.git
+cd cpu-usage.js
 npm install express socket.io
 node app.js
 ```
